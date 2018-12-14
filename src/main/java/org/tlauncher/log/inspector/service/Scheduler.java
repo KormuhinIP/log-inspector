@@ -15,13 +15,12 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     private FileService fileService;
 
-    @Scheduled(cron = "0 50 17 * * *")
+    @Scheduled(cron = "0 00 22 * * *")
     public void updateFolder() {
         LocalDate ld = LocalDate.now();
         DateTimeFormatter fOut = DateTimeFormatter.ofPattern("dd.MM.uuuu");
-        String date = ld.format(fOut);
         fileService.setCount(1);
-        fileService.setOlddate(date);
+        fileService.setOlddate(ld.format(fOut));
     }
 
     @Override
