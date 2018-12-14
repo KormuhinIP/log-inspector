@@ -1,6 +1,5 @@
 package org.tlauncher.log.inspector.controller;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.tlauncher.log.inspector.model.ClientType;
 import org.tlauncher.log.inspector.service.FileService;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
 @Controller
 public class LogController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 @Autowired
 private FileService fileService;
-
 
     @RequestMapping(value = "/save/log", method = RequestMethod.POST, headers = "content-type=multipart/*")
     ResponseEntity<String> saveLog(@RequestParam("version") String version, @RequestParam("clientType") ClientType clientType,
