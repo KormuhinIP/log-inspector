@@ -15,12 +15,13 @@ import java.util.zip.ZipInputStream;
 @Service
 public class FileService {
     private AtomicInteger count = new AtomicInteger(1);
-    private String olddate;
+    volatile private String olddate;
 
     public void processLog(String io, ClientType version, MultipartFile file) throws Exception {
         ZipInputStream zip = new ZipInputStream(file.getInputStream());
-        File filePath = new File(version + "/" + io + "/" + olddate);
+        File filePath = new File("files/" + version + "/" + io + "/" + olddate);
         filePath.mkdirs();
+        zip.getNextEntry();
         Path p = Paths.get(filePath + "/" + count.getAndIncrement() + ".log");
         Files.write(p, IOUtils.readFully(zip, -1, true));
         zip.close();
@@ -33,6 +34,7 @@ public class FileService {
     public void setOlddate(String olddate) {
         this.olddate = olddate;
     }
+
 }
 
 
