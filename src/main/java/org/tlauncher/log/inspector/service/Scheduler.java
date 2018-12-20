@@ -6,8 +6,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,6 +19,8 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     private FileService fileService;
     @Autowired
     private MyFileVisitor myFileVisitor;
+    @Autowired
+    private Cleaner cleaner;
 
     @Scheduled(cron = "0 00 22 * * *")
     public void updateFolder() {
@@ -33,14 +33,14 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         updateFolder();
+        cleaner.cleanerResult();
+        cleaner.cleanerFiles();
     }
 
     @Scheduled(cron = "0 10 22 * * *")
     public void sort() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("error.strings.txt"));
-        while (reader.ready()) {
-            myFileVisitor.setPartOfContent(reader.readLine());
-            Files.walkFileTree(Paths.get("files"), myFileVisitor);
-        }
+        myFileVisitor.reader();
+        Files.walkFileTree(Paths.get("files"), myFileVisitor);
+        System.out.println("sorting complete.");
     }
 }
