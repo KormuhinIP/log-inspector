@@ -1,5 +1,7 @@
 package org.tlauncher.log.inspector.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FileService fileService;
     @Autowired
@@ -27,9 +29,8 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
         LocalDate ld = LocalDate.now();
         DateTimeFormatter fOut = DateTimeFormatter.ofPattern("dd.MM.uuuu");
         fileService.setCount(1);
-        fileService.setOlddate(ld.format(fOut));
+        fileService.setOldDate(ld.format(fOut));
     }
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         updateFolder();
@@ -41,6 +42,6 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     public void sort() throws IOException {
         myFileVisitor.reader();
         Files.walkFileTree(Paths.get("files"), myFileVisitor);
-        System.out.println("sorting complete.");
+        logger.info("Sorting complete.");
     }
 }
