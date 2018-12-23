@@ -17,7 +17,7 @@ import java.util.Date;
 @Service
 public class MyFileVisitor extends SimpleFileVisitor<Path> {
 
-    private ArrayList<String> list = new ArrayList<>();
+    public ArrayList<String> list = new ArrayList<>();
 
     public void reader() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("error.strings.txt"));
