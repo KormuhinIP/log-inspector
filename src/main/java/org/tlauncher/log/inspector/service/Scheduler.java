@@ -42,6 +42,7 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     public void sort() throws IOException {
         myFileVisitor.reader();
         Files.walkFileTree(Paths.get("files"), myFileVisitor);
+        myFileVisitor.list.clear();
         logger.info("Sorting complete.");
     }
 }
