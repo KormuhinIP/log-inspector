@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
@@ -16,7 +15,8 @@ import java.util.Date;
 public class Cleaner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    public void cleanerResult() {                       //удаление папки с предыдущими результатами
+
+    private void cleanerResult() {                       //удаление папки с предыдущими результатами
         Path path = Paths.get("result");
         if (Files.exists(path)) {
             try {
@@ -46,7 +46,7 @@ public class Cleaner {
                     return FileVisitResult.CONTINUE;
                 }
             });
-        } catch (IOException e) {
+        } catch (Throwable e) {
             logger.error("Exception: ", e);
         }
     }
