@@ -14,12 +14,15 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 @Service
 public class MyFileVisitor extends SimpleFileVisitor<Path> {
 
     public ArrayList<String> list = new ArrayList<>();
 
     public void reader() throws IOException {
+        list.clear();
         BufferedReader reader = new BufferedReader(new FileReader("error.strings.txt"));
         while (reader.ready()) {
             list.add(reader.readLine());
@@ -35,7 +38,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
                 File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/" + partOfContent + "/" + file.getName(3));
                 filePath.mkdirs();
                 Path p = Paths.get(filePath + "/" + file.getFileName());
-                Files.copy(file, p);
+                Files.copy(file, p, REPLACE_EXISTING);
             }
         }
         return FileVisitResult.CONTINUE;
