@@ -16,7 +16,7 @@ public class Cleaner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private void cleanerResult() {                       //удаление папки с предыдущими результатами
+    public void cleanerResult() {                       //удаление папки с предыдущими результатами
         Path path = Paths.get("result");
         if (Files.exists(path)) {
             try {
