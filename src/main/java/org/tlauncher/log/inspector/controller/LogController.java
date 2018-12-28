@@ -24,7 +24,7 @@ public class LogController {
 @Autowired
 private FileService fileService;
 
-    @RequestMapping(value = "/save/log", method = RequestMethod.POST, headers = "content-type=text/plain")
+    @RequestMapping(value = "/save/log", method = RequestMethod.POST)
     ResponseEntity<String> saveLog(@RequestParam("version") String version, @RequestParam("clientType") ClientType clientType,
                                    @RequestBody byte[] payload) throws Exception
     {
