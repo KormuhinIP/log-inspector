@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.tlauncher.log.inspector.model.ClientType;
 import org.tlauncher.log.inspector.service.FileService;
+import org.tlauncher.log.inspector.validator.VersionValidator;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -21,15 +22,22 @@ import java.util.zip.GZIPInputStream;
 public class LogController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-@Autowired
-private FileService fileService;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private VersionValidator validator;
+
 
     @RequestMapping(value = "/save/log", method = RequestMethod.POST)
-    ResponseEntity<String> saveLog(@RequestParam("version") String version, @RequestParam("clientType") ClientType clientType,
+    ResponseEntity<String> saveLog(@RequestParam(value = "version") String version, @RequestParam(value = "clientType") ClientType clientType,
                                    @RequestBody byte[] payload) throws Exception
     {
-        String res = IOUtils.toString(new GZIPInputStream(new ByteArrayInputStream(payload)), StandardCharsets.UTF_8);
-        fileService.processLog(version, clientType, res);
-        return ResponseEntity.ok("ok\n");
+        if (!validator.isValid(version)) {
+            logger.warn("not proper version " + version);
+        } else {
+            String res = IOUtils.toString(new GZIPInputStream(new ByteArrayInputStream(payload)), StandardCharsets.UTF_8);
+            fileService.processLog(version, clientType, res);
+        }
+        return ResponseEntity.ok("ok");
     }
 }

@@ -26,5 +26,4 @@ public class ApplicationConfig {
         multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
         return new CommonsMultipartResolver();
     }
-
 }
