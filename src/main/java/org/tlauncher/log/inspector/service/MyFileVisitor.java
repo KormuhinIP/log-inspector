@@ -26,21 +26,29 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
         BufferedReader reader = new BufferedReader(new FileReader("error.strings.txt"));
         while (reader.ready()) {
             list.add(reader.readLine());
-        }
+                   }
         reader.close();
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         String content = new String(Files.readAllBytes(file));
+        boolean presence=false;
         for (String partOfContent : list) {
             if (content.contains(partOfContent) && !FileUtils.isFileOlder(file.toFile(), Date.from(LocalDate.now().minusDays(10).atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
                 File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/" + partOfContent + "/" + file.getName(3));
                 filePath.mkdirs();
                 Path p = Paths.get(filePath + "/" + file.getFileName());
                 Files.copy(file, p, REPLACE_EXISTING);
+                presence=true;
             }
         }
+                  if(!presence)  {
+                      File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/not_found/" + file.getName(3));
+                filePath.mkdirs();
+                Path p = Paths.get(filePath + "/" + file.getFileName());
+                Files.copy(file, p, REPLACE_EXISTING);
+            }
         return FileVisitResult.CONTINUE;
     }
 }

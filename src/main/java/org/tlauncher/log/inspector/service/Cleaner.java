@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class Cleaner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public void cleanerResult() {                       //удаление папки с предыдущими результатами
+    public void cleanerResult() {
         Path path = Paths.get("result");
         if (Files.exists(path)) {
             try {
@@ -27,27 +28,29 @@ public class Cleaner {
         }
     }
 
-    public void cleanerFiles() {                        //удаление файлов старше 30 дней
-        try {
-            Files.walkFileTree(Paths.get("files"), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path path, BasicFileAttributes fileAttributes) {
-                    if (FileUtils.isFileOlder(path.toFile(), Date.from(LocalDate.now().minusDays(30).atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
-                        path.toFile().delete();
+    public void cleanerFiles() {
+        if (Files.exists(Paths.get("files"))) {
+            try {
+                Files.walkFileTree(Paths.get("files"), new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path path, BasicFileAttributes fileAttributes) {
+                        if (FileUtils.isFileOlder(path.toFile(), Date.from(LocalDate.now().minusDays(30).atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
+                            path.toFile().delete();
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    return FileVisitResult.CONTINUE;
-                }
 
-                @Override
-                public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes fileAttributes) {
-                    if (path.toFile().list().length == 0) {
-                        path.toFile().delete();
+                    @Override
+                    public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes fileAttributes) {
+                        if (path.toFile().list().length == 0) {
+                            path.toFile().delete();
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (Throwable e) {
-            logger.error("Exception: ", e);
+                });
+            } catch (Throwable e) {
+                logger.error("Exception: ", e);
+            }
         }
     }
 

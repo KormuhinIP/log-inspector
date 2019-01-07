@@ -21,11 +21,9 @@ public class FileService {
         Path p = Paths.get(filePath + "/" + count.getAndIncrement() + ".log");
         Files.write(p, text.getBytes(StandardCharsets.UTF_8));
     }
-
     void setCount(int count) {
         this.count.set(count);
     }
-
     void setOldDate(String oldDate) {
         this.oldDate = oldDate;
     }
