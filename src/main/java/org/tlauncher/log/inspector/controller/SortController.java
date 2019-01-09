@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.tlauncher.log.inspector.service.Cleaner;
 import org.tlauncher.log.inspector.service.Scheduler;
+
 import java.io.IOException;
 
 
 @Controller
-public class WeController {
+public class SortController {
 
     @Autowired
     private Scheduler scheduler;

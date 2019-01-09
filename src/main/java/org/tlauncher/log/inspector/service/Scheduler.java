@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,7 +33,7 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
     public void updateFolder() {
         LocalDate ld = LocalDate.now();
         DateTimeFormatter fOut = DateTimeFormatter.ofPattern("dd.MM.uuuu");
-        fileService.setCount(1);
+
         fileService.setOldDate(ld.format(fOut));
     }
     @Override
