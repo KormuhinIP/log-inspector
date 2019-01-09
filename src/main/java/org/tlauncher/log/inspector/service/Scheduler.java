@@ -43,14 +43,20 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent> {
         cleaner.cleanerFiles();
     }
      @Scheduled(cron = "0 10 01 * * *")
-    public void sort() throws IOException {
-        lock.lock();
-         myFileVisitor.reader();
+     public void sort() {
+         lock.lock();
+         try {
+             myFileVisitor.reader();
             Files.walkFileTree(Paths.get("files"), myFileVisitor);
             zipped.zipped("result");
             logger.info("Sorting complete.");
             lock.unlock();
-           }
+         } catch (IOException e) {
+             logger.error("Exception: ", e);
+         } finally {
+             lock.unlock();
+         }
+     }
       public Boolean getBlocking() {return lock.tryLock();}
 }
 
