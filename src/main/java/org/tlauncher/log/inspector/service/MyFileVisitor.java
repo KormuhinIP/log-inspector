@@ -36,7 +36,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
         boolean presence=false;
         for (String partOfContent : list) {
             if (content.contains(partOfContent) && !FileUtils.isFileOlder(file.toFile(), Date.from(LocalDate.now().minusDays(10).atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
-                File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/" + partOfContent + "/" + file.getName(3));
+                File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/" + partOfContent);
                 filePath.mkdirs();
                 Path p = Paths.get(filePath + "/" + file.getFileName());
                 Files.copy(file, p, REPLACE_EXISTING);
@@ -44,7 +44,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
             }
         }
                   if(!presence)  {
-                      File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/not_found/" + file.getName(3));
+                      File filePath = new File("result/" + file.getName(1) + "/" + file.getName(2) + "/not_found");
                 filePath.mkdirs();
                 Path p = Paths.get(filePath + "/" + file.getFileName());
                 Files.copy(file, p, REPLACE_EXISTING);
